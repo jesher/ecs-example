@@ -1,0 +1,7 @@
+terraform.tfvars
+.terraform/
+*.backup
+node_module/
+*.lock
+*.tfvars
+*.env
