@@ -4,7 +4,7 @@ RUN mkdir -p /usr/src
 
 WORKDIR /usr/src
 
-COPY nextjs-test /usr/src
+COPY . /usr/src
 
 RUN npm install
 ENV NEXT_PUBLIC_GITHUB_ID=${NEXT_PUBLIC_GITHUB_ID}

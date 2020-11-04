@@ -1,6 +1,6 @@
 resource "aws_alb_target_group" "alb_target_group" {
   name     = "${var.project}-${var.environment}-alb-target-group"
-  port     = 80
+  port     = 3000
   protocol = "HTTP"
   vpc_id   = "${module.vpc.vpc_id}"
   target_type = "ip"
@@ -9,6 +9,7 @@ resource "aws_alb_target_group" "alb_target_group" {
     create_before_destroy = true
   }
   health_check {
+    port                = 3000
     healthy_threshold   = 5
     unhealthy_threshold = 5
     timeout             = 10
@@ -24,11 +25,18 @@ resource "aws_security_group" "web_inbound_sg" {
   vpc_id      = "${module.vpc.vpc_id}"
 
   ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
+  }  
 
   ingress {
     from_port   = 8

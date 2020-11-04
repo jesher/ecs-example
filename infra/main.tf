@@ -40,6 +40,13 @@ resource "aws_security_group" "ecs_service" {
   }  
 
   ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }    
+
+  ingress {
     from_port   = 8
     to_port     = 0
     protocol    = "icmp"
@@ -63,9 +70,9 @@ resource "aws_cloudwatch_log_group" "main" {
 #### ECS
 ################################
 
-resource "aws_ecr_repository" "teste-leads" {
-  name = "${var.project}-${var.environment}-ecr-cluster"
-}
+# resource "aws_ecr_repository" "teste-leads" {
+#   name = "${var.project}-${var.environment}-ecr-cluster"
+# }
 
 resource "aws_ecs_cluster" "main" {
   name = "${var.project}-${var.environment}-ecs-cluster"
@@ -84,7 +91,7 @@ resource "aws_ecs_task_definition" "app" {
   {
     "cpu": 256,
     "memory": 256,
-    "image": "nginx:1.13-alpine",
+    "image": "720531668650.dkr.ecr.us-east-1.amazonaws.com/example-dev-ecr-cluster:8618e540595c04392bfda2b1e60a6b60d5715c2a",
     "name": "app",
     "networkMode": "awsvpc",
     "ulimits": [
@@ -96,8 +103,8 @@ resource "aws_ecs_task_definition" "app" {
     ],
     "portMappings": [
       {
-        "containerPort":80,
-        "hostPort": ${var.app_port}
+        "containerPort": 3000,
+        "hostPort": 3000
       }
     ],
     "logConfiguration": {
@@ -128,7 +135,7 @@ resource "aws_ecs_service" "main" {
   load_balancer {
     target_group_arn = aws_alb_target_group.alb_target_group.id
     container_name   = "app"
-    container_port   = 80
+    container_port   = 3000
   }
   depends_on = [aws_alb_listener.openjobs]
 }

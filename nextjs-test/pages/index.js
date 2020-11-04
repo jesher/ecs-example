@@ -10,7 +10,7 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Test deployment used helmfile!!
+          Test deployment used AWS ECS!!
         </h1>
 
         <p className="description">
