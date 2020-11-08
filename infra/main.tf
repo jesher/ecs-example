@@ -37,14 +37,14 @@ resource "aws_security_group" "ecs_service" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }  
+  }
 
   ingress {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }    
+  }
 
   ingress {
     from_port   = 8
@@ -70,9 +70,9 @@ resource "aws_cloudwatch_log_group" "main" {
 #### ECS
 ################################
 
-# resource "aws_ecr_repository" "teste-leads" {
-#   name = "${var.project}-${var.environment}-ecr-cluster"
-# }
+resource "aws_ecr_repository" "repository" {
+  name = "${var.project}-${var.environment}-ecr-cluster"
+}
 
 resource "aws_ecs_cluster" "main" {
   name = "${var.project}-${var.environment}-ecs-cluster"
@@ -91,7 +91,7 @@ resource "aws_ecs_task_definition" "app" {
   {
     "cpu": 256,
     "memory": 256,
-    "image": "720531668650.dkr.ecr.us-east-1.amazonaws.com/example-dev-ecr-cluster:8618e540595c04392bfda2b1e60a6b60d5715c2a",
+    "image": "${aws_ecr_repository.repository.repository_url}:latest",
     "name": "app",
     "networkMode": "awsvpc",
     "ulimits": [
@@ -114,7 +114,7 @@ resource "aws_ecs_task_definition" "app" {
 	        "awslogs-region": "${var.AWS_REGION}",
 	        "awslogs-stream-prefix": "${var.project}-${var.environment}"
 	    }
-	}    
+	}
   }
 ]
 DEFINITION
@@ -128,7 +128,7 @@ resource "aws_ecs_service" "main" {
   desired_count                      = 3
   launch_type                        = "FARGATE"
   network_configuration {
-    assign_public_ip = true  
+    assign_public_ip = true
     security_groups = [aws_security_group.ecs_service.id]
     subnets         = module.vpc.public_subnets
   }

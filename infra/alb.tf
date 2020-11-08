@@ -15,7 +15,7 @@ resource "aws_alb_target_group" "alb_target_group" {
     timeout             = 10
     interval            = 30
     path                = "/"
-  }  
+  }
 }
 
 /* security group for ALB */
@@ -36,7 +36,7 @@ resource "aws_security_group" "web_inbound_sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }  
+  }
 
   ingress {
     from_port   = 8
@@ -51,7 +51,6 @@ resource "aws_security_group" "web_inbound_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
 }
 
 resource "aws_alb" "alb_openjobs" {
