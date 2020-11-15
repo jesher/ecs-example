@@ -3,7 +3,7 @@ name: build
 on:
   push:
     paths:
-    - 'nextjs-test/**'
+    - 'app-test/**'
 
 jobs:
   build_app:
@@ -24,7 +24,7 @@ jobs:
 
         # APP
       - name: Build, tag, and push image to Amazon ECR - APP
-        working-directory: nextjs-test
+        working-directory: app-test
         id: build-image-app
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -40,7 +40,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: nextjs-test/task-definition.json
+          task-definition: app-test/task-definition.json
           container-name: app
           image: ${{ steps.build-image-app.outputs.image }}    
           
