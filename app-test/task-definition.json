@@ -1,0 +1,43 @@
+{
+  "executionRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "example-dev-log-grp-app",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "example-dev"
+        }
+      },
+      "entryPoint": null,
+      "portMappings": [
+        {
+          "hostPort": 3000,
+          "protocol": "tcp",
+          "containerPort": 3000
+        }
+      ],
+      "cpu": 256,
+      "ulimits": [
+        {
+          "name": "nofile",
+          "softLimit": 1000000,
+          "hardLimit": 1000000
+        }
+      ],
+      "memory": 256,
+      "image": "720531668650.dkr.ecr.us-east-1.amazonaws.com/example-dev-ecr-cluster:8618e540595c04392bfda2b1e60a6b60d5715c2a",
+      "name": "app"
+    }
+  ],
+  "memory": "512",
+  "taskRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:720531668650:task-definition/app:7",
+  "family": "app",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "256"
+}

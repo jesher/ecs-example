@@ -1,8 +1,8 @@
-variable "AWS_ACCESS_KEY_ID" {
-}
+# variable "AWS_ACCESS_KEY_ID" {
+# }
 
-variable "AWS_SECRET_ACCESS_KEY" {
-}
+# variable "AWS_SECRET_ACCESS_KEY" {
+# }
 
 variable "AWS_REGION" {
   default = "us-east-1"
@@ -21,7 +21,7 @@ variable "scale_min" {
 }
 
 variable "scale_max" {
-  default="4"
+  default="5"
 }
 
 variable "app_port"{
