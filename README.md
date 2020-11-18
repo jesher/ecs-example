@@ -9,7 +9,7 @@ Example of creating an ECS infrastructure on AWS using terraform and deploying a
 
 This project is an example, therefore, its settings are predetermined to work in this model, but it does not prevent you from copying and implementing the same structure in your projects.
 
-## Github secrets
+### Github secrets
 
 Add secrets in github reference your credentials AWS
 
