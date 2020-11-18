@@ -10,7 +10,6 @@
           "awslogs-stream-prefix": "example-dev"
         }
       },
-      "entryPoint": null,
       "portMappings": [
         {
           "hostPort": 3000,

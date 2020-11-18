@@ -8,7 +8,7 @@ terraform {
 
 terraform {
   backend "s3" {
-    bucket = "example-dev-1"
+    bucket = "example-dev-1" # alter name bucket for you bucket created
     key    = "terraform/example-dev-1"
     region = "us-east-1"
   }

@@ -24,6 +24,3 @@ variable "scale_max" {
   default="5"
 }
 
-variable "app_port"{
-  default="80"
-}

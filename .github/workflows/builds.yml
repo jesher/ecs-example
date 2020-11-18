@@ -9,7 +9,7 @@ jobs:
   build_app:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1    
+      - uses: actions/checkout@v1
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -34,7 +34,7 @@ jobs:
           pwd
           docker build --build-arg NEXT_PUBLIC_GITHUB_ID=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"      
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
@@ -42,21 +42,21 @@ jobs:
         with:
           task-definition: app-test/task-definition.json
           container-name: app
-          image: ${{ steps.build-image-app.outputs.image }}    
-          
+          image: ${{ steps.build-image-app.outputs.image }}
+
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: example-dev-ecs-service-app
           cluster: example-dev-ecs-cluster
-          wait-for-service-stability: true     
+          wait-for-service-stability: true
 
 
   build_api:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1    
+      - uses: actions/checkout@v1
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -69,7 +69,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-        # API  
+        # API
       - name: Build, tag, and push image to Amazon ECR - API
         working-directory: api-test
         id: build-image-api
@@ -81,7 +81,7 @@ jobs:
           pwd
           docker build --build-arg NEXT_PUBLIC_GITHUB_ID=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"          
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
@@ -89,13 +89,13 @@ jobs:
         with:
           task-definition: api-test/task-definition.json
           container-name: api
-          image: ${{ steps.build-image-api.outputs.image }}    
-          
+          image: ${{ steps.build-image-api.outputs.image }}
+
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: example-dev-ecs-service-api
           cluster: example-dev-ecs-cluster
-          wait-for-service-stability: true          
-     
+          wait-for-service-stability: true
+
