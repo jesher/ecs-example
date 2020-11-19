@@ -1,1 +1,1 @@
-# Example page in next.js
+# Example page in nextjs
