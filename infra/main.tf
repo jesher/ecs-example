@@ -179,7 +179,7 @@ resource "aws_ecs_service" "app" {
   name                               = "${var.project}-${var.environment}-ecs-service-app"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.app.arn
-  desired_count                      = 3
+  desired_count                      = 1
   launch_type                        = "FARGATE"
   network_configuration {
     assign_public_ip = true
@@ -199,7 +199,7 @@ resource "aws_ecs_service" "api" {
   name                               = "${var.project}-${var.environment}-ecs-service-api"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.api.arn
-  desired_count                      = 3
+  desired_count                      = 1
   launch_type                        = "FARGATE"
   network_configuration {
     assign_public_ip = true

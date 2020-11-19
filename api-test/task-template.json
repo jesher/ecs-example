@@ -25,7 +25,9 @@
         "command": null,
         "linuxParameters": null,
         "cpu": 256,
-        "environment": [],
+        "environment": [
+          { "name": "HASH_COMMIT", "value": "${HASH_COMMIT}" }
+        ],
         "resourceRequirements": null,
         "ulimits": [
           {

@@ -35,7 +35,7 @@ resource "aws_alb_target_group" "alb_target_group_api" {
     unhealthy_threshold = 5
     timeout             = 10
     interval            = 30
-    path                = "/"
+    path                = "/v1/healthcheck"
   }
 }
 
@@ -103,13 +103,13 @@ resource "aws_lb_listener_rule" "api" {
 
   condition {
     path_pattern {
-      values = ["/"]
+      values = ["/v1/*"]
     }
   }
 
   condition {
     host_header {
-      values = ["api*.me*"]
+      values = [aws_alb.alb_openjobs.dns_name] # you alter for your subdomain
     }
   }
 }
