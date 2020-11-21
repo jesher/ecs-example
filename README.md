@@ -1,3 +1,5 @@
+![.github/workflows/deploy.yml](https://github.com/jesher/ecs-example/workflows/.github/workflows/deploy.yml/badge.svg?branch=master)
+
 # Example ECS Fargate Deploy
 Example of creating an ECS infrastructure on AWS using terraform and deploying an application and API to the Cluster.
 

@@ -1,8 +1,5 @@
 name: Terraform Apply
-on:
-  push:
-    paths:
-    - 'infra/**'
+on: [push, pull_request]
 
 defaults:
   run:
