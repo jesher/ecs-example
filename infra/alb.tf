@@ -1,8 +1,8 @@
 resource "aws_alb_target_group" "alb_target_group_app" {
-  name     = "${var.project}-${var.environment}-alb-target-group"
-  port     = 3000
-  protocol = "HTTP"
-  vpc_id   = "${module.vpc.vpc_id}"
+  name        = "${var.project}-${var.environment}-alb-target-group"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = "${module.vpc.vpc_id}"
   target_type = "ip"
 
   lifecycle {
@@ -20,10 +20,10 @@ resource "aws_alb_target_group" "alb_target_group_app" {
 
 
 resource "aws_alb_target_group" "alb_target_group_api" {
-  name     = "${var.project}-${var.environment}-alb-target-group-api"
-  port     = 3000
-  protocol = "HTTP"
-  vpc_id   = "${module.vpc.vpc_id}"
+  name        = "${var.project}-${var.environment}-alb-target-group-api"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = "${module.vpc.vpc_id}"
   target_type = "ip"
 
   lifecycle {

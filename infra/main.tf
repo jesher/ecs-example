@@ -118,15 +118,15 @@ DEFINITION
 
 /* service app */
 resource "aws_ecs_service" "app" {
-  name                               = "${var.project}-${var.environment}-ecs-service-app"
-  cluster                            = aws_ecs_cluster.main.id
-  task_definition                    = aws_ecs_task_definition.app.arn
-  desired_count                      = 1
-  launch_type                        = "FARGATE"
+  name            = "${var.project}-${var.environment}-ecs-service-app"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.app.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
   network_configuration {
     assign_public_ip = true
-    security_groups = [aws_security_group.ecs_service.id]
-    subnets         = module.vpc.public_subnets
+    security_groups  = [aws_security_group.ecs_service.id]
+    subnets          = module.vpc.public_subnets
   }
   load_balancer {
     target_group_arn = aws_alb_target_group.alb_target_group_app.id
@@ -138,15 +138,15 @@ resource "aws_ecs_service" "app" {
 
 /* service api */
 resource "aws_ecs_service" "api" {
-  name                               = "${var.project}-${var.environment}-ecs-service-api"
-  cluster                            = aws_ecs_cluster.main.id
-  task_definition                    = aws_ecs_task_definition.api.arn
-  desired_count                      = 1
-  launch_type                        = "FARGATE"
+  name            = "${var.project}-${var.environment}-ecs-service-api"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.api.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
   network_configuration {
     assign_public_ip = true
-    security_groups = [aws_security_group.ecs_service.id]
-    subnets         = module.vpc.public_subnets
+    security_groups  = [aws_security_group.ecs_service.id]
+    subnets          = module.vpc.public_subnets
   }
   load_balancer {
     target_group_arn = aws_alb_target_group.alb_target_group_api.id

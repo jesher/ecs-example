@@ -1,0 +1,64 @@
+name: example-command
+on:
+  repository_dispatch:
+    types: [example-command]
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add reaction
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          reaction-type: hooray
+
+
+          
+    # - uses: actions/checkout@v1
+
+    # - name: Install Terraform
+    #   env:
+    #         TERRAFORM_VERSION: "0.13.5"
+    #   run: |
+    #     tf_version=$TERRAFORM_VERSION
+    #     wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+    #     unzip terraform_"$tf_version"_linux_amd64.zip
+    #     sudo mv terraform /usr/local/bin/
+
+    # - name: Verify Terraform version
+    #   run: terraform --version
+
+    # - name: Terraform init
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   run: terraform init -input=false
+
+    # - name: Terraform validation
+    #   run: terraform validate
+
+    # - name: Terraform plan
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   run: terraform plan -no-color     
+
+
+    # - name: Create comment
+    #   uses: peter-evans/create-or-update-comment@v1
+    #   with:
+    #     issue-number: "${{github.event.pull_request.number}}"
+    #     body: |
+    #       This is a multi-line test comment
+    #       - With GitHub **Markdown** :sparkles:
+    #       - Created by [create-or-update-comment][1]
+
+    #       [1]: https://github.com/peter-evans/create-or-update-comment   
+
+    # - name: Terraform apply
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   run: terraform apply -auto-approve -input=false
