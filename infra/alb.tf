@@ -1,4 +1,4 @@
-resource "aws_alb_target_group" "alb_target_group" {
+resource "aws_alb_target_group" "alb_target_group_app" {
   name     = "${var.project}-${var.environment}-alb-target-group"
   port     = 3000
   protocol = "HTTP"
@@ -74,26 +74,26 @@ resource "aws_security_group" "web_inbound_sg" {
   }
 }
 
-resource "aws_alb" "alb_openjobs" {
+resource "aws_alb" "alb_main" {
   name            = "${var.project}-${var.environment}-alb"
   subnets         = module.vpc.public_subnets
   security_groups = ["${aws_security_group.web_inbound_sg.id}"]
 }
 
-resource "aws_alb_listener" "openjobs" {
-  load_balancer_arn = "${aws_alb.alb_openjobs.arn}"
+resource "aws_alb_listener" "main_listener" {
+  load_balancer_arn = "${aws_alb.alb_main.arn}"
   port              = "80"
   protocol          = "HTTP"
-  depends_on        = ["aws_alb_target_group.alb_target_group"]
+  depends_on        = ["aws_alb_target_group.alb_target_group_app"]
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.alb_target_group.arn}"
+    target_group_arn = "${aws_alb_target_group.alb_target_group_app.arn}"
     type             = "forward"
   }
 }
 
 resource "aws_lb_listener_rule" "api" {
-  listener_arn = aws_alb_listener.openjobs.arn
+  listener_arn = aws_alb_listener.main_listener.arn
   priority     = 100
 
   action {
@@ -109,7 +109,7 @@ resource "aws_lb_listener_rule" "api" {
 
   condition {
     host_header {
-      values = [aws_alb.alb_openjobs.dns_name] # you alter for your subdomain
+      values = [aws_alb.alb_main.dns_name] # you alter for your subdomain
     }
   }
 }
