@@ -1,4 +1,4 @@
-name: example-command
+name: Slash Command Processor (Example)
 on:
   repository_dispatch:
     types: [example-command]
@@ -6,10 +6,13 @@ jobs:
   example:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.client_payload.pull_request.head.ref }}
       - name: Add reaction
         uses: peter-evans/create-or-update-comment@v1
         with:
           token: ${{ secrets.PAT }}
-          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: hooray

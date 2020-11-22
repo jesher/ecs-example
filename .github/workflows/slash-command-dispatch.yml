@@ -1,24 +1,17 @@
-# Translates slash-commands in issue comments to repository-dispatch events.
-
-# Name of the action (displayed in the Actions tab)
-name: Slash command dispatch
-
-# Triggers for this action.
-#  This one only runs when a comment is added to an issue.
-#  (on GitHub, pull requests are one kind of "issue")
+name: Slash Command Dispatch
 on:
   issue_comment:
-    types: [ created ]
-
-# When the trigger fires, we run these jobs.
+    types: [created]
 jobs:
-  dispatch: #  We just have one job, called "dispatch"
-    runs-on: ubuntu-latest # The OS we run on. Doesn't really matter for this simple action.
-    steps: # This job only has one step, called "Dispatch slash command"
-      - name: Dispatch slash command
-        uses: peter-evans/slash-command-dispatch@v1 # Uses a pre-built action from the Marketplace
-        with: # These are the parameters passed to the action
-          token: ${{ secrets.PAT }} # This action needs a personal access token in order to dispatch
-          reactions: false # By default, this action will add reactions to the slash command comment; this turns those off
-          issue-type: pull-request # We only want to look for slash commands in pull requests, not other issues
-          commands: example, teardown # The slash commands we look for: /deploy and /teardown
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch slash command (example)
+        uses: peter-evans/slash-command-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          reaction-token: ${{ secrets.PAT }}
+          issue-type: pull-request
+          commands: example
+          dispatch-type: workflow
+          repository: jesher/ecs-example
