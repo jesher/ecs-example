@@ -18,4 +18,4 @@ jobs:
             > /terrafor-plan | terraform plan
             > /terrafor-apply [\<args\> ...] | apply terraform
             > /help | command help
-          reaction-type: hooray
+          
