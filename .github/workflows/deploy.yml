@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.REPO_ACCESS_TOKEN }}
-        repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
-        ref: ${{ github.event.client_payload.pull_request.head.ref }}
 
     - name: Install Terraform
       env:
@@ -36,12 +32,16 @@ jobs:
       run: terraform init -input=false
 
     - name: Terraform validation
-      run: terraform validate
+      run: |
+        terraform validate > validate.txt
+        pwd
 
-    - name: Terraform validation
-      id: terraform-plan
-      run: terraform plan  
-
+    - name: Upload Plan Artifact
+      id: build-image-app
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: validate.txt
 
     - name: Update comment
       uses: peter-evans/create-or-update-comment@v1
@@ -51,7 +51,7 @@ jobs:
         comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
         body: |
           > Command | Description
-          > steps.terraform-plan.outputs.*     
+          > ${{ steps.terraform-plan.outputs.name }}   
 
     # - name: Terraform apply
     #   env:
