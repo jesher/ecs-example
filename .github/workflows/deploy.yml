@@ -1,8 +1,7 @@
 name: Terraform Apply
 on:
-  push:
-    paths:
-    - 'infra/**'
+  repository_dispatch:
+    types: [terraform-plan-command]
 
 defaults:
   run:
@@ -35,8 +34,8 @@ jobs:
     - name: Terraform validation
       run: terraform validate
 
-    - name: Terraform apply
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: terraform apply -auto-approve -input=false
+    # - name: Terraform apply
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   run: terraform apply -auto-approve -input=false
