@@ -1,0 +1,194 @@
+name: Terraform Apply
+on:
+  repository_dispatch:
+    types: [create-demo-command]
+
+jobs:
+  terraform_apply:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: infra
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          terraform_version: 0.13.5
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.client_payload.pull_request.head.ref }}
+
+      - uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Terraform Validate
+        id: validate
+        continue-on-error: true
+        run: terraform validate -no-color
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Terraform apply
+        id: apply
+        run: terraform apply -auto-approve -input=false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Update comment success
+        uses: peter-evans/create-or-update-comment@v1
+        if: ${{ success() }}
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN  }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          body: |
+              ___
+              ## Terraform Plan ![Terraform Plan](https://img.shields.io/badge/Terraform%20apply-passed-green)
+              <details><summary>view plan</summary>
+              <p>
+
+
+              ```bash
+              ${{ steps.plan.outputs.stdout }}
+              ```
+
+              </p>
+              </details>
+
+      - name: Update comment failure
+        uses: peter-evans/create-or-update-comment@v1
+        if: ${{ failure() }}
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN  }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          body: |
+              ___
+              ## Terraform Plan ![Terraform Plan](https://img.shields.io/badge/Terraform%20apply-error-red)
+              <details><summary>view plan</summary>
+              <p>
+
+
+              ```bash
+              ${{ steps.plan.outputs.stdout }}
+              ```
+
+              </p>
+              </details>
+
+  build_app:
+    needs: terraform_apply
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+        # APP
+      - name: Build, tag, and push image to Amazon ECR - APP
+        working-directory: app-test
+        id: build-image-app
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY:	example-dev/app
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          pwd
+          docker build --build-arg NEXT_PUBLIC_GITHUB_ID=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: app-test/task-definition.json
+          container-name: app
+          image: ${{ steps.build-image-app.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: example-dev-ecs-service-app
+          cluster: example-dev-ecs-cluster
+          wait-for-service-stability: true
+
+
+  build_api:
+    runs-on: ubuntu-latest
+    needs: terraform_apply
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+        # API
+      - name: Build, tag, and push image to Amazon ECR - API
+        working-directory: api-test
+        id: build-image-api
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: 	example-dev/api
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          pwd
+          docker build --build-arg NEXT_PUBLIC_GITHUB_ID=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+
+      - uses: danielr1996/envsubst-action@1.0.0
+        env:
+            HASH_COMMIT: ${{ github.sha }}
+        with:
+          input: api-test/task-template.json
+          output: api-test/task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: api-test/task-definition.json
+          container-name: api
+          image: ${{ steps.build-image-api.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: example-dev-ecs-service-api
+          cluster: example-dev-ecs-cluster
+          wait-for-service-stability: true

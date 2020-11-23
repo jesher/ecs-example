@@ -13,6 +13,8 @@ jobs:
           commands: |
             terraform-plan
             terraform-apply
+            terraform-destroy
+            create-demo
             help
           permission: admin
           issue-type: pull-request

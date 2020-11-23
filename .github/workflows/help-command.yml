@@ -1,4 +1,4 @@
-name: help-command
+name: Help Command
 on:
   repository_dispatch:
     types: [help-command]
@@ -21,7 +21,8 @@ jobs:
           body: |
             > Command | Description
             > --- | ---
-            > /terrafor-plan | terraform plan
-            > /terrafor-apply [\<args\> ...] | apply terraform
+            > /terrafor-plan | terraform plan command is used to create an execution plan
+            > /terrafor-apply | command is used to apply the changes
+            > /terrafor-destroy | command is used to destroy
             > /help | command help
-          
+            > /create-demo | create demo
