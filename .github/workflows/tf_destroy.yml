@@ -55,8 +55,8 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           body: |
               ___
-              ## Terraform Plan ![Terraform Plan](https://img.shields.io/badge/Terraform%20destroy-passed-green)
-              <details><summary>view plan</summary>
+              ## Terraform Destroy ![Terraform Destroy](https://img.shields.io/badge/Terraform%20destroy-passed-green)
+              <details><summary>view destroy</summary>
               <p>
 
 
@@ -78,13 +78,13 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           body: |
               ___
-              ## Terraform Plan ![Terraform Plan](https://img.shields.io/badge/Terraform%20destroy-error-red)
-              <details><summary>view plan</summary>
+              ## Terraform Destroy ![Terraform Destroy](https://img.shields.io/badge/Terraform%20destroy-error-red)
+              <details><summary>view destroy</summary>
               <p>
 
 
               ```bash
-              ${{ steps.plan.outputs.stdout }}
+              ${{ steps.destroy.outputs.stdout }}
               ```
 
               </p>

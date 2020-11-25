@@ -55,13 +55,13 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           body: |
               ___
-              ## Terraform Plan ![Terraform Plan](https://img.shields.io/badge/Terraform%20apply-passed-green)
-              <details><summary>view plan</summary>
+              ## Terraform Apply ![Terraform Apply](https://img.shields.io/badge/Terraform%20apply-passed-green)
+              <details><summary>view apply</summary>
               <p>
 
 
               ```bash
-              ${{ steps.plan.outputs.stdout }}
+              ${{ steps.apply.outputs.stdout }}
               ```
 
               </p>
@@ -78,13 +78,13 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           body: |
               ___
-              ## Terraform Plan ![Terraform Plan](https://img.shields.io/badge/Terraform%20apply-error-red)
-              <details><summary>view plan</summary>
+              ## Terraform Apply ![Terraform Apply](https://img.shields.io/badge/Terraform%20apply-error-red)
+              <details><summary>view apply</summary>
               <p>
 
 
               ```bash
-              ${{ steps.plan.outputs.stdout }}
+              ${{ steps.apply.outputs.stdout }}
               ```
 
               </p>
