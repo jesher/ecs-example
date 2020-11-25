@@ -116,10 +116,12 @@ jobs:
           ECR_REPOSITORY:	example-dev/app
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          pwd
+          apt-get update
+          apt-get install jq -y
           docker build --build-arg NEXT_PUBLIC_GITHUB_ID=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "::set-output name=url::$(aws elb describe-load-balancers | jq '.LoadBalancerDescriptions[0].DNSName')
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
@@ -136,6 +138,18 @@ jobs:
           service: example-dev-ecs-service-app
           cluster: example-dev-ecs-cluster
           wait-for-service-stability: true
+
+      - name: Update comment link alb
+        uses: peter-evans/create-or-update-comment@v1
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN  }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          body: |
+              ___
+              Link access: [${{ steps.build-image-app.outputs.url }}](${{ steps.build-image-app.outputs.url }})
 
 
   build_api:
