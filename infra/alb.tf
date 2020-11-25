@@ -1,8 +1,8 @@
-resource "aws_alb_target_group" "alb_target_group" {
-  name     = "${var.project}-${var.environment}-alb-target-group"
-  port     = 3000
-  protocol = "HTTP"
-  vpc_id   = "${module.vpc.vpc_id}"
+resource "aws_alb_target_group" "alb_target_group_app" {
+  name        = "${var.project}-${var.environment}-alb-target-group"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = "${module.vpc.vpc_id}"
   target_type = "ip"
 
   lifecycle {
@@ -20,10 +20,10 @@ resource "aws_alb_target_group" "alb_target_group" {
 
 
 resource "aws_alb_target_group" "alb_target_group_api" {
-  name     = "${var.project}-${var.environment}-alb-target-group-api"
-  port     = 3000
-  protocol = "HTTP"
-  vpc_id   = "${module.vpc.vpc_id}"
+  name        = "${var.project}-${var.environment}-alb-target-group-api"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = "${module.vpc.vpc_id}"
   target_type = "ip"
 
   lifecycle {
@@ -84,10 +84,10 @@ resource "aws_alb_listener" "openjobs" {
   load_balancer_arn = "${aws_alb.alb_openjobs.arn}"
   port              = "80"
   protocol          = "HTTP"
-  depends_on        = ["aws_alb_target_group.alb_target_group"]
+  depends_on        = ["aws_alb_target_group.alb_target_group_app"]
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.alb_target_group.arn}"
+    target_group_arn = "${aws_alb_target_group.alb_target_group_app.arn}"
     type             = "forward"
   }
 }

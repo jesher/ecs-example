@@ -61,7 +61,7 @@ jobs:
 
 
               ```bash
-              ${{ steps.plan.outputs.stdout }}
+              ${{ steps.destroy.outputs.stdout }}
               ```
 
               </p>
