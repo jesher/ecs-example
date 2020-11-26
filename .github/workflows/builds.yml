@@ -2,8 +2,11 @@ name: build
 
 on:
   push:
-    paths:
-    - 'app-test/**'
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build_app:
