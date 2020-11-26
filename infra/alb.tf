@@ -74,14 +74,14 @@ resource "aws_security_group" "web_inbound_sg" {
   }
 }
 
-resource "aws_alb" "alb_openjobs" {
+resource "aws_alb" "alb_example" {
   name            = "${var.project}-${var.environment}-alb"
   subnets         = module.vpc.public_subnets
   security_groups = ["${aws_security_group.web_inbound_sg.id}"]
 }
 
 resource "aws_alb_listener" "openjobs" {
-  load_balancer_arn = "${aws_alb.alb_openjobs.arn}"
+  load_balancer_arn = "${aws_alb.alb_example.arn}"
   port              = "80"
   protocol          = "HTTP"
   depends_on        = ["aws_alb_target_group.alb_target_group_app"]
@@ -109,7 +109,7 @@ resource "aws_lb_listener_rule" "api" {
 
   condition {
     host_header {
-      values = [aws_alb.alb_openjobs.dns_name] # you alter for your subdomain
+      values = [aws_alb.alb_example.dns_name] # you alter for your subdomain
     }
   }
 }
