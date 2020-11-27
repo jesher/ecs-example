@@ -1,5 +1,4 @@
 {
-  "executionRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
   "containerDefinitions": [
     {
       "logConfiguration": {
@@ -26,13 +25,11 @@
         }
       ],
       "memory": 256,
-      "image": "720531668650.dkr.ecr.us-east-1.amazonaws.com/example-dev-ecr-cluster:8618e540595c04392bfda2b1e60a6b60d5715c2a",
+      "image": "image",
       "name": "app"
     }
   ],
   "memory": "512",
-  "taskRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:720531668650:task-definition/app:7",
   "family": "app",
   "requiresCompatibilities": [
     "FARGATE"
