@@ -1,5 +1,4 @@
 {
-    "executionRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
     "containerDefinitions": [
       {
         "logConfiguration": {
@@ -29,13 +28,11 @@
           }
         ],
         "memory": 256,
-        "image": "720531668650.dkr.ecr.us-east-1.amazonaws.com/example-dev/api:latest",
+        "image": "image",
         "name": "api"
       }
     ],
     "memory": "512",
-    "taskRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:720531668650:task-definition/api:1",
     "family": "api",
     "requiresCompatibilities": [
       "FARGATE"
