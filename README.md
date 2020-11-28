@@ -81,7 +81,7 @@ If you want to destroy what was created just run
 4. `\terraform-destroy`
 
 ### 3. Update application or API only
-If you wanted to accomplish some change in the application or API to validate or test you do not need to perform the creation of the environment if it is already set up, just run `\ build` it will update everything in ECS.
+If you wanted to accomplish some change in the application or API to validate or test you do not need to perform the creation of the environment if it is already set up, just run `\build` it will update everything in ECS.
 
 ## Remarks
 
