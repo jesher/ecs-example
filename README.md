@@ -1,3 +1,5 @@
+![Slash Command Dispatch](https://github.com/jesher/ecs-example/workflows/Slash%20Command%20Dispatch/badge.svg?branch=master) ![build](https://github.com/jesher/ecs-example/workflows/build/badge.svg?branch=master)
+
 # Example ECS Fargate Deploy
 Example of creating an ECS infrastructure on AWS using terraform and deploying an application and API to the Cluster.
 
