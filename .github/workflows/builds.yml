@@ -1,10 +1,8 @@
 name: build
 
 on:
-  push:
-    paths:
-    - 'app-test/**'
-
+  repository_dispatch:
+    types: [build-command]
 jobs:
   build_app:
     runs-on: ubuntu-latest
