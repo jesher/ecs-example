@@ -13,7 +13,7 @@ This project is an example, therefore, its settings are predetermined to work in
 
 ### 1. Github secrets
 
-Add secrets in github reference your credentials AWS and create personal access token (PAT)[https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token]
+Add secrets in github reference your credentials AWS and create personal access token [PAT](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token)
 
 ```
 AWS_ACCESS_KEY_ID
@@ -61,7 +61,7 @@ A few minutes later a comment from terraform appears, after finishing the terraf
 
 ![Base Architecture](docs/img/01_github.png)
 
-> NIn the commentary there will be two links for you to access both application and API
+> In the commentary, there will be two links for you to access both application and API
 
 If you want to destroy is so run the command `\terraform-destroy`
 
