@@ -1,7 +1,7 @@
 ![Slash Command Dispatch](https://github.com/jesher/ecs-example/workflows/Slash%20Command%20Dispatch/badge.svg?branch=master) ![build](https://github.com/jesher/ecs-example/workflows/build/badge.svg?branch=master)
 
 # Example ECS Fargate Deploy
-Example of creating an ECS infrastructure on AWS using terraform and deploying an application and API to the Cluster.
+Creating an ECS infrastructure example in AWS using terraform and deploying the application and API to the Cluster.
 
 ## Architecture
 
@@ -9,11 +9,11 @@ Example of creating an ECS infrastructure on AWS using terraform and deploying a
 
 ## Getting started
 
-This project is an example, therefore, its settings are predetermined to work in this model, but it does not prevent you from copying and implementing the same structure in your projects.
+This project is an example, however, the steps bellow are predetermined to work in this model. If you want copying and implementing the same structure in your projects be my guest, but follow with attention the instructions detailed in the next sections.
 
 ### 1. Github secrets
 
-Add secrets in github reference your credentials AWS and create personal access token [PAT](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token)
+Add secrets in your github account with your AWS credentials and create a personal access token [PAT](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token)
 
 ```
 AWS_ACCESS_KEY_ID
@@ -22,7 +22,7 @@ REPO_ACCESS_TOKEN
 ```
 > More info in [encrypted-secret](https://docs.github.com/pt/free-pro-team@latest/actions/reference/encrypted-secrets)
 ### 2. Terraform
-You can run terraform in two ways, locally and through `github actions`, but both will need you to create a bucket for the backend of the terraform and change the file `infra/provider.tf`
+You can run terraform by two ways, locally and through `github actions`, both will need to create a bucket for the backend. After you create that bucket change the file `infra/provider.tf` with your created bucket.
 
  ```HCL
 terraform {
@@ -36,7 +36,7 @@ terraform {
 
 ### 3. ChatOps
 
-It is easy to interact with this project we created a ChatOps comment via the pull request.
+It is easy to interact with this project we created a ChatOps comment when the pull request.
 
   > Command | Description
   > --- | ---
@@ -49,7 +49,7 @@ It is easy to interact with this project we created a ChatOps comment via the pu
 
 <br>
 
-__Mas para funcionar vocẽ deve criar um pull request e executar alguns dos comados apresentados na tabela__
+__However, to work properly you've to create a pull request and run some commands exhibited in the table__
 
 ### 1. Criar demostração
 
