@@ -1,5 +1,4 @@
 {
-    "executionRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
     "containerDefinitions": [
       {
         "logConfiguration": {
@@ -34,7 +33,6 @@
       }
     ],
     "memory": "512",
-    "taskRoleArn": "arn:aws:iam::720531668650:role/example-dev-ecs-role",
     "family": "api",
     "requiresCompatibilities": [
       "FARGATE"
