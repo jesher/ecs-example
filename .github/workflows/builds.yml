@@ -34,18 +34,10 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: app-test/task-definition.json
-          container-name: app
-          image: ${{ steps.build-image-app.outputs.image }}
-
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: app-test/task-definition.json
           service: example-dev-ecs-service-app
           cluster: example-dev-ecs-cluster
           wait-for-service-stability: true
@@ -89,18 +81,10 @@ jobs:
           input: api-test/task-template.json
           output: api-test/task-definition.json
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: api-test/task-definition.json
-          container-name: api
-          image: ${{ steps.build-image-api.outputs.image }}
-
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: api-test/task-definition.json
           service: example-dev-ecs-service-api
           cluster: example-dev-ecs-cluster
           wait-for-service-stability: true
