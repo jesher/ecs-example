@@ -51,7 +51,7 @@ It is easy to interact with this project we created a ChatOps comment when the p
 
 __However, to work properly you've to create a pull request and run some commands exhibited in the table__
 
-### 1. Criar demostração
+### 1. Create demo
 
 > Fork this repository and follow the instructions below to see the magic happen
 
